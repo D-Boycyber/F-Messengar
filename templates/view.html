@@ -2,48 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Decrypt WhatsApp Message</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Secret Message</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; display: flex; justify-content: center; align-items: center; height: 90vh; margin: 0; }
-        .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        h2 { text-align: center; color: #007bff; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-        textarea, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; margin-top: 15px; border-radius: 6px; font-size: 16px; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
-        .msg-box { margin-top: 20px; padding: 15px; background: #eef2f7; border-radius: 6px; font-size: 18px; font-weight: bold; color: #2c3e50; word-break: break-all; text-align: center; border-left: 5px solid #007bff; }
-        .error { color: #d9534f; font-weight: bold; text-align: center; }
-        .nav-link { text-align: center; margin-top: 15px; }
-        .nav-link a { color: #25d366; text-decoration: none; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
+        h2 { color: #075e54; margin-top: 0; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { background: #1ebe5d; }
+        .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
+        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>🔓 Decrypt Secret Message</h2>
-    <form method="POST">
-        <label for="ciphertext">Paste Encrypted Text from WhatsApp:</label>
-        <textarea name="ciphertext" id="ciphertext" rows="3" placeholder="Paste scrambled text here..." required></textarea>
+    <div class="card">
+        <h2>🔓 View Secret Message</h2>
 
-        <label for="shift">Shift Key:</label>
-        <input type="number" name="shift" id="shift" value="3" min="1" max="25" required>
-
-        <button type="submit">Decrypt Message</button>
-    </form>
-
-    {% if decrypted_message %}
-        <div class="msg-box">
-            Original Message:<br>
-            <span style="color: #28a745;">{{ decrypted_message }}</span>
-        </div>
-    {% endif %}
-
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% endif %}
-
-    <div class="nav-link">
-        <a href="/">⬅ Back to Encrypter</a>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% elif decrypted %}
+            <div class="result">
+                <p><strong>Decrypted Message:</strong></p>
+                <p style="font-size: 20px; font-weight: bold; color: #075e54; word-break: break-word;">{{ decrypted }}</p>
+                <p style="color: #c92a2a; font-size: 13px; margin-top: 15px;">⚠️ **Self-Destructed:** This message has been permanently deleted from the server and cannot be viewed again.</p>
+            </div>
+        {% else %}
+            <form method="POST">
+                <p style="color: #666; font-size: 14px;">This is a secure one-time message. Enter the correct shift key to read and destroy it:</p>
+                <label>Shift Key:</label>
+                <input type="number" name="shift" value="3" required>
+                <button type="submit">Decrypt Message</button>
+            </form>
+        {% endif %}
     </div>
-</div>
 </body>
 </html>
