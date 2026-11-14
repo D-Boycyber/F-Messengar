@@ -8,7 +8,7 @@
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
         .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
         h2 { color: #075e54; margin-top: 0; }
-        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        textarea, input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
         button:hover { background: #1ebe5d; }
         .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="card">
-        <h2>🔓 View Secret Message</h2>
+        <h2>🔓 Decrypt Secret Message</h2>
 
         {% if error %}
             <div class="error">{{ error }}</div>
@@ -25,13 +25,18 @@
             <div class="result">
                 <p><strong>Decrypted Message:</strong></p>
                 <p style="font-size: 20px; font-weight: bold; color: #075e54; word-break: break-word;">{{ decrypted }}</p>
-                <p style="color: #c92a2a; font-size: 13px; margin-top: 15px;">⚠️ **Self-Destructed:** This message has been permanently deleted from the server and cannot be viewed again.</p>
+                <p style="color: #c92a2a; font-size: 13px; margin-top: 15px;">⚠️ **Success:** Message successfully decrypted!</p>
             </div>
         {% else %}
             <form method="POST">
-                <p style="color: #666; font-size: 14px;">This is a secure one-time message. Enter the correct shift key to read and destroy it:</p>
+                <p style="color: #666; font-size: 14px;">Paste the encrypted text and enter your shift key below:</p>
+                
+                <label>Encrypted Message:</label>
+                <textarea name="ciphertext" rows="3" placeholder="Paste encrypted text here..." required></textarea>
+                
                 <label>Shift Key:</label>
                 <input type="number" name="shift" value="3" required>
+                
                 <button type="submit">Decrypt Message</button>
             </form>
         {% endif %}
