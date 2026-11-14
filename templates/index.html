@@ -2,41 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WhatsApp Secret Encrypter</title>
+    <title>Decrypt WhatsApp Message</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
         h2 { color: #075e54; margin-top: 0; }
-        textarea, input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
         button:hover { background: #1ebe5d; }
         .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
+        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>🔒 Encrypt for WhatsApp</h2>
-        
-        <form method="POST">
-            <label>Secret Message:</label>
-            <textarea name="message" rows="3" placeholder="Type message..." required></textarea>
-            
-            <label>Shift Key (Number, e.g., 5):</label>
-            <input type="number" name="shift" value="3" required>
-            
-            <button type="submit">Encrypt Message</button>
-        </form>
+        <h2>🔓 Decrypt Secret Message</h2>
 
-        {% if encrypted %}
-        <div class="result">
-            <p><strong>1. Encrypted Text:</strong><br>{{ encrypted }}</p>
-            <p><strong>2. Shift Key to share:</strong> {{ shift }}</p>
-            <p><strong>3. One-Time Decrypt Link:</strong><br>
-               <a href="{{ url_for('view_secret', secret_id=secret_id, _external=True) }}" target="_blank">
-                   {{ url_for('view_secret', secret_id=secret_id, _external=True) }}
-               </a>
-            </p>
-        </div>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% elif decrypted %}
+            <div class="result">
+                <p><strong>Success! Decrypted Message:</strong></p>
+                <p style="font-size: 18px; font-weight: bold; color: #075e54;">{{ decrypted }}</p>
+                <p style="color: #c92a2a; font-size: 12px; margin-top: 15px;">⚠️ This message has now self-destructed and can never be opened again.</p>
+            </div>
+        {% else %}
+            <form method="POST">
+                <p style="color: #666; font-size: 14px;">Someone sent you a secure one-time message. Enter the shift key provided to read it:</p>
+                <label>Shift Key:</label>
+                <input type="number" name="shift" value="3" required>
+                <button type="submit">Decrypt Message</button>
+            </form>
         {% endif %}
     </div>
 </body>
