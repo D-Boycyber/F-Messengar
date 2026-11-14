@@ -50,7 +50,10 @@ def decrypt_page():
         if not ciphertext:
             error = "Please enter an encrypted message."
         else:
-            decrypted_msg = caesar_decrypt(ciphertext, shift)
+            try:
+                decrypted_msg = caesar_decrypt(ciphertext, shift)
+            except Exception:
+                error = "Failed to decrypt. Please check your text and shift key."
             
     return render_template('view.html', decrypted=decrypted_msg, error=error)
 
