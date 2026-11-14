@@ -4,44 +4,40 @@
     <meta charset="UTF-8">
     <title>WhatsApp Secret Encrypter</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; display: flex; justify-content: center; align-items: center; height: 90vh; margin: 0; }
-        .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        h2 { text-align: center; color: #25d366; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-        textarea, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; background-color: #25d366; color: white; border: none; padding: 12px; margin-top: 15px; border-radius: 6px; font-size: 16px; cursor: pointer; }
-        button:hover { background-color: #1ebe5d; }
-        .output-box { margin-top: 20px; padding: 12px; background: #eef9f0; border-left: 5px solid #25d366; border-radius: 4px; word-break: break-all; }
-        .nav-link { text-align: center; margin-top: 15px; }
-        .nav-link a { color: #007bff; text-decoration: none; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #075e54; margin-top: 0; }
+        textarea, input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { background: #1ebe5d; }
+        .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>🔒 Encrypt for WhatsApp</h2>
-    <form method="POST">
-        <label for="message">Secret Message:</label>
-        <textarea name="message" id="message" rows="3" placeholder="Type message..." required></textarea>
+    <div class="card">
+        <h2>🔒 Encrypt for WhatsApp</h2>
+        
+        <form method="POST">
+            <label>Secret Message:</label>
+            <textarea name="message" rows="3" placeholder="Type message..." required></textarea>
+            
+            <label>Shift Key (Number, e.g., 5):</label>
+            <input type="number" name="shift" value="3" required>
+            
+            <button type="submit">Encrypt Message</button>
+        </form>
 
-        <label for="shift">Shift Key (Number, e.g., 5):</label>
-        <input type="number" name="shift" id="shift" value="3" min="1" max="25" required>
-
-        <button type="submit">Encrypt Message</button>
-    </form>
-
-    {% if encrypted_message %}
-    <div class="output-box">
-        <strong>1. Send this Encrypted Text on WhatsApp:</strong><br>
-        <code>{{ encrypted_message }}</code><br><br>
-        <strong>2. Tell them your Shift Key:</strong> <span style="color: red; font-weight: bold;">{{ shift_used }}</span><br><br>
-        <strong>3. Send them this Decrypt Link:</strong><br>
-        <p><a href="http://10.47.249.166:5000/decrypt" target="_blank">http://10.47.249.166:5000/decrypt</a></p>
+        {% if encrypted %}
+        <div class="result">
+            <p><strong>1. Encrypted Text:</strong><br>{{ encrypted }}</p>
+            <p><strong>2. Shift Key to share:</strong> {{ shift }}</p>
+            <p><strong>3. One-Time Decrypt Link:</strong><br>
+               <a href="{{ url_for('view_secret', secret_id=secret_id, _external=True) }}" target="_blank">
+                   {{ url_for('view_secret', secret_id=secret_id, _external=True) }}
+               </a>
+            </p>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-
-    <div class="nav-link">
-        <a href="/decrypt">Go to Decrypt Page ➔</a>
-    </div>
-</div>
 </body>
 </html>
