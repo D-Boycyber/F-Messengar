@@ -22,8 +22,12 @@ def caesar_decrypt(text, shift):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        message = request.form.get('message')
-        shift = int(request.form.get('shift', 3))
+        message = request.form.get('message', '')
+        shift_val = request.form.get('shift', 3)
+        shift = int(shift_val) if shift_val else 3
+        
+        if not message:
+            return render_template('index.html', error="Please enter a message to encrypt.")
         
         # Encrypt the message
         encrypted_msg = caesar_encrypt(message, shift)
@@ -34,18 +38,18 @@ def index():
         # Save it to our database
         secrets_db[secret_id] = encrypted_msg
         
-        return render_template('index.html', encrypted=encrypted_msg, secret_id=secret_id)
+        return render_template('index.html', encrypted=encrypted_msg, secret_id=secret_id, shift=shift)
         
     return render_template('index.html')
 
 @app.route('/view/<secret_id>', methods=['GET', 'POST'])
 def view_secret(secret_id):
-    # Check if the secret exists
     if secret_id not in secrets_db:
         return render_template('view.html', error="This secret message has already been viewed and destroyed, or it never existed!")
     
     if request.method == 'POST':
-        shift = int(request.form.get('shift', 3))
+        shift_val = request.form.get('shift', 3)
+        shift = int(shift_val) if shift_val else 3
         encrypted_msg = secrets_db[secret_id]
         
         # THE ONE-TIME TRICK: Delete it immediately upon decryption attempt
