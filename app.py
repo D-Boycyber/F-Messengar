@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import uuid
 
 app = Flask(__name__)
@@ -22,9 +22,11 @@ def caesar_decrypt(text, shift):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        message = request.form.get('message', '')
-        shift_val = request.form.get('shift', 3)
-        shift = int(shift_val) if shift_val else 3
+        message = request.form.get('message', '').strip()
+        try:
+            shift = int(request.form.get('shift', 3))
+        except ValueError:
+            shift = 3
         
         if not message:
             return render_template('index.html', error="Please enter a message to encrypt.")
@@ -48,8 +50,11 @@ def view_secret(secret_id):
         return render_template('view.html', error="This secret message has already been viewed and destroyed, or it never existed!")
     
     if request.method == 'POST':
-        shift_val = request.form.get('shift', 3)
-        shift = int(shift_val) if shift_val else 3
+        try:
+            shift = int(request.form.get('shift', 3))
+        except ValueError:
+            shift = 3
+            
         encrypted_msg = secrets_db[secret_id]
         
         # THE ONE-TIME TRICK: Delete it immediately upon decryption attempt
