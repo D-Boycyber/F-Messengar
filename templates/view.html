@@ -28,7 +28,8 @@
                 <p style="color: #c92a2a; font-size: 13px; margin-top: 15px;">⚠️ **Success:** Message successfully decrypted!</p>
             </div>
         {% else %}
-            <form method="POST">
+            <!-- Added action="/decrypt" so it posts to the right route -->
+            <form action="/decrypt" method="POST">
                 <p style="color: #666; font-size: 14px;">Paste the encrypted text and enter your shift key below:</p>
                 
                 <label>Encrypted Message:</label>
