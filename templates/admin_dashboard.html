@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Control Room</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #075e54; margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
+        th { background: #075e54; color: white; }
+        button, input { padding: 8px 12px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background: #c92a2a; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #a61e1e; }
+        .settings-box { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #dee2e6; }
+        .logout { float: right; color: #c92a2a; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin/logout" class="logout">Logout</a>
+        <h2>🛠️ Admin Control Room</h2>
+
+        <div class="settings-box">
+            <h3>Change Admin Passcode</h3>
+            <form method="POST">
+                <input type="hidden" name="action" value="update_pass">
+                <input type="text" name="new_admin_pass" value="{{ admin_pass }}" required>
+                <button type="submit" style="background: #075e54;">Update Passcode</button>
+            </form>
+        </div>
+
+        <h3>Active Secret Links</h3>
+        <table>
+            <tr>
+                <th>Secret ID</th>
+                <th>Passcode Protected?</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for s_id, data in db.items() %}
+            <tr>
+                <td><code>{{ s_id }}</code></td>
+                <td>{{ 'Yes (' + data.passcode + ')' if data.passcode else 'No' }}</td>
+                <td>{{ 'Expired / Viewed' if data.expired else 'Active' }}</td>
+                <td>
+                    <form method="POST" style="margin: 0;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="secret_id" value="{{ s_id }}">
+                        <button type="submit">Revoke / Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" style="text-align: center; color: #666;">No secret messages currently in storage.</td></tr>
+            {% endfor %}
+        </table>
+        <p style="margin-top: 20px;"><a href="/" style="color: #075e54; text-decoration: none; font-weight: bold;">← Back to App</a></p>
+    </div>
+</body>
+</html>
