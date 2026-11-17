@@ -3,48 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decrypt Secret Message</title>
+    <title>View Secure Message</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
         .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
         h2 { color: #075e54; margin-top: 0; }
-        textarea, input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
         button:hover { background: #1ebe5d; }
         .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
         .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border: 1px solid #f5c6cb; margin-bottom: 10px; }
-        .nav-link { display: block; text-align: center; margin-top: 15px; color: #075e54; text-decoration: none; font-weight: bold; }
-        .nav-link:hover { text-decoration: underline; }
+        .timer { color: #c92a2a; font-weight: bold; font-size: 14px; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>🔓 Decrypt Message</h2>
+        <h2>🔓 Secure Message Portal</h2>
 
         {% if error %}
             <div class="error">{{ error }}</div>
-        {% endif %}
-
-        {% if decrypted %}
-            <div class="result">
+        {% elif decrypted %}
+            <div class="result" id="message-box">
                 <p><strong>Decrypted Message:</strong></p>
-                <p style="font-size: 20px; font-weight: bold; color: #075e54; word-break: break-word;">{{ decrypted }}</p>
+                <p style="font-size: 20px; font-weight: bold; color: #075e54;" id="secret-text">{{ decrypted }}</p>
+                <p class="timer">⚠️ This message will self-destruct in <span id="countdown">15</span> seconds!</p>
             </div>
+            <script>
+                let timeLeft = 15;
+                const timerInterval = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById('countdown').innerText = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        document.getElementById('message-box').innerHTML = "<p style='color: #c92a2a; font-weight: bold;'>⚠️ Message permanently destroyed and wiped from screen.</p>";
+                    }
+                }, 1000);
+            </script>
         {% else %}
-            <form action="/decrypt" method="POST">
-                <p style="color: #666; font-size: 14px;">Paste the encrypted text and enter the shift key below:</p>
-                
-                <label>Encrypted Message:</label>
-                <textarea name="ciphertext" rows="3" placeholder="Paste encrypted text here..." required></textarea>
-                
-                <label>Shift Key:</label>
-                <input type="number" name="shift" value="3" required>
-                
-                <button type="submit">Decrypt Message</button>
+            <form method="POST">
+                {% if has_passcode %}
+                    <p style="color: #666; font-size: 14px;">This message is password protected. Enter the passcode to view it:</p>
+                    <label>Passcode:</label>
+                    <input type="password" name="passcode" placeholder="Enter passcode..." required>
+                {% else %}
+                    <p style="color: #666; font-size: 14px;">Click below to decrypt and view this one-time secure message:</p>
+                {% endif %}
+                <button type="submit">Unlock & View Message</button>
             </form>
         {% endif %}
-
-        <a href="/" class="nav-link">🔒 Back to Encrypting</a>
     </div>
 </body>
 </html>
