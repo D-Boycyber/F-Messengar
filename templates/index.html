@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure One-Time Messenger</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
+        h2 { color: #075e54; margin-top: 0; }
+        textarea, input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { background: #1ebe5d; }
+        .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
+        .error { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+        .nav-link { display: block; text-align: center; margin-top: 15px; color: #075e54; text-decoration: none; font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🔒 Secure Encryptor</h2>
+        
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
 
+        <form method="POST">
+            <label>Secret Message (Supports letters & numbers):</label>
+            <textarea name="message" rows="3" placeholder="Type message..." required></textarea>
+            
+            <label>Shift Key (Number):</label>
+            <input type="number" name="shift" value="3" required>
+
+            <label>Optional Receiver Passcode:</label>
+            <input type="text" name="passcode" placeholder="e.g. 1234 (leave blank for none)">
+            
+            <button type="submit">Create Secure Link</button>
+        </form>
+
+        {% if encrypted %}
+        <div class="result">
+            <p><strong>Encrypted Text:</strong><br>{{ encrypted }}</p>
+            <p><strong>One-Time Self-Destruct Link:</strong><br>
+               <a href="{{ url_for('view_secret', secret_id=secret_id, _external=True) }}" target="_blank">
+                   {{ url_for('view_secret', secret_id=secret_id, _external=True) }}
+               </a>
+            </p>
+        </div>
+        {% endif %}
+
+        <a href="/admin" class="nav-link">🛠️ Admin Control Room</a>
+    </div>
+</body>
+</html>
