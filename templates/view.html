@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Secure Message</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
-        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
-        h2 { color: #075e54; margin-top: 0; }
-        textarea, input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
-        button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
-        button:hover { background: #1ebe5d; }
-        .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
-        .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border: 1px solid #f5c6cb; margin-bottom: 10px; font-size: 14px; }
-        .timer { color: #c92a2a; font-weight: bold; font-size: 14px; margin-top: 10px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .card { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); width: 100%; max-width: 600px; box-sizing: border-box; border: 1px solid #334155; }
+        h2 { color: #38bdf8; margin-top: 0; font-size: 26px; margin-bottom: 25px; border-bottom: 2px solid #334155; padding-bottom: 12px; }
+        label { display: block; margin-top: 18px; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; font-size: 15px; }
+        textarea, input, button { width: 100%; padding: 14px 16px; margin: 0; border: 1px solid #475569; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: #0f172a; color: #f8fafc; transition: all 0.2s ease; }
+        textarea:focus, input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
+        textarea { resize: vertical; min-height: 100px; }
+        button { background: #0ea5e9; color: white; font-weight: bold; border: none; cursor: pointer; margin-top: 25px; font-size: 16px; }
+        button:hover { background: #0284c7; }
+        .result { background: #0f172a; padding: 25px; border-radius: 8px; margin-top: 25px; border: 1px solid #334155; }
+        .error { background: #7f1d1d; color: #fca5a5; padding: 16px; border-radius: 8px; border: 1px solid #b91c1c; margin-bottom: 20px; font-weight: 500; }
+        .timer { color: #f87171; font-weight: bold; font-size: 15px; margin-top: 20px; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2); text-align: center; }
+        p { color: #cbd5e1; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -26,9 +30,9 @@
 
         {% if decrypted %}
             <div class="result" id="message-box">
-                <p><strong>Decrypted Message:</strong></p>
-                <p style="font-size: 20px; font-weight: bold; color: #075e54;" id="secret-text">{{ decrypted }}</p>
-                <p class="timer">⚠️ This message will self-destruct in <span id="countdown">15</span> seconds!</p>
+                <p style="font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-top:0;">Decrypted Message:</p>
+                <p style="font-size: 22px; font-weight: bold; color: #38bdf8; word-break: break-word;" id="secret-text">{{ decrypted }}</p>
+                <div class="timer">⚠️ This message will self-destruct in <span id="countdown">15</span> seconds!</div>
             </div>
             <script>
                 let timeLeft = 15;
@@ -37,16 +41,16 @@
                     document.getElementById('countdown').innerText = timeLeft;
                     if (timeLeft <= 0) {
                         clearInterval(timerInterval);
-                        document.getElementById('message-box').innerHTML = "<p style='color: #c92a2a; font-weight: bold;'>⚠️ Message permanently destroyed and wiped from screen.</p>";
+                        document.getElementById('message-box').innerHTML = "<p style='color: #f87171; font-weight: bold; text-align: center; font-size: 18px;'>⚠️ Message permanently destroyed and wiped from screen.</p>";
                     }
                 }, 1000);
             </script>
         {% else %}
             <form method="POST">
-                <p style="color: #666; font-size: 14px;">Paste the encrypted text and enter the passcode to decrypt:</p>
+                <p>Paste the encrypted text and enter the passcode to unlock this message:</p>
                 
                 <label>Encrypted Ciphertext:</label>
-                <textarea name="ciphertext" rows="3" placeholder="Paste encrypted message here..." required></textarea>
+                <textarea name="ciphertext" placeholder="Paste ciphertext here..." required></textarea>
 
                 {% if has_passcode %}
                     <label>Passcode:</label>
