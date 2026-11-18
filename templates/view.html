@@ -8,7 +8,7 @@
         body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
         .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
         h2 { color: #075e54; margin-top: 0; }
-        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        textarea, input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
         button { background: #25d366; color: white; font-weight: bold; border: none; cursor: pointer; }
         button:hover { background: #1ebe5d; }
         .result { background: #ecfaf1; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; border: 1px solid #d4edda; }
@@ -43,14 +43,17 @@
             </script>
         {% else %}
             <form method="POST">
+                <p style="color: #666; font-size: 14px;">Paste the encrypted text and enter the passcode to decrypt:</p>
+                
+                <label>Encrypted Ciphertext:</label>
+                <textarea name="ciphertext" rows="3" placeholder="Paste encrypted message here..." required></textarea>
+
                 {% if has_passcode %}
-                    <p style="color: #666; font-size: 14px;">This message is password protected. Enter the passcode to view it:</p>
                     <label>Passcode:</label>
-                    <input type="password" name="passcode" placeholder="Enter passcode..." required>
-                {% else %}
-                    <p style="color: #666; font-size: 14px;">Click below to decrypt and view this one-time secure message:</p>
+                    <input type="text" name="passcode" placeholder="Enter passcode..." required>
                 {% endif %}
-                <button type="submit">Unlock & View Message</button>
+
+                <button type="submit">Decrypt Message</button>
             </form>
         {% endif %}
     </div>
