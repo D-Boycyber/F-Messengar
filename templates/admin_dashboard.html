@@ -4,17 +4,24 @@
     <meta charset="UTF-8">
     <title>Admin Control Room</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { color: #075e54; margin-top: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px 20px; box-sizing: border-box; }
+        .container { max-width: 900px; margin: auto; background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid #334155; }
+        h2 { color: #38bdf8; margin-top: 0; font-size: 28px; }
+        h3 { color: #e2e8f0; font-size: 18px; margin-top: 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
-        th { background: #075e54; color: white; }
-        button, input { padding: 8px 12px; border-radius: 5px; border: 1px solid #ccc; }
-        button { background: #c92a2a; color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { background: #a61e1e; }
-        .settings-box { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #dee2e6; }
-        .logout { float: right; color: #c92a2a; text-decoration: none; font-weight: bold; }
+        th, td { border: 1px solid #334155; padding: 14px; text-align: left; font-size: 15px; }
+        th { background: #0f172a; color: #38bdf8; font-weight: 600; }
+        td { background: #1e293b; color: #cbd5e1; }
+        input, button { padding: 10px 14px; border-radius: 6px; border: 1px solid #475569; font-size: 14px; }
+        input { background: #0f172a; color: #f8fafc; }
+        button { background: #ef4444; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #dc2626; }
+        .settings-box { background: #0f172a; padding: 25px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #334155; }
+        .logout { float: right; color: #f87171; text-decoration: none; font-weight: bold; font-size: 15px; padding-top: 5px; }
+        .logout:hover { text-decoration: underline; }
+        code { background: #0f172a; padding: 4px 8px; border-radius: 4px; color: #38bdf8; font-family: monospace; }
+        a { color: #38bdf8; text-decoration: none; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -24,14 +31,14 @@
 
         <div class="settings-box">
             <h3>Change Admin Passcode</h3>
-            <form method="POST">
+            <form method="POST" style="display: flex; gap: 10px; margin-top: 15px;">
                 <input type="hidden" name="action" value="update_pass">
-                <input type="text" name="new_admin_pass" value="{{ admin_pass }}" required>
-                <button type="submit" style="background: #075e54;">Update Passcode</button>
+                <input type="text" name="new_admin_pass" value="{{ admin_pass }}" style="flex-grow: 1;" required>
+                <button type="submit" style="background: #0ea5e9;">Update Passcode</button>
             </form>
         </div>
 
-        <h3>Active Secret Links</h3>
+        <h3 style="margin-top: 30px;">Active Secret Links Management</h3>
         <table>
             <tr>
                 <th>Secret ID</th>
@@ -48,15 +55,15 @@
                     <form method="POST" style="margin: 0;">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="secret_id" value="{{ s_id }}">
-                        <button type="submit">Revoke / Delete</button>
+                        <button type="submit">Revoke Link</button>
                     </form>
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="4" style="text-align: center; color: #666;">No secret messages currently in storage.</td></tr>
+            <tr><td colspan="4" style="text-align: center; color: #64748b; padding: 30px;">No secret messages currently in storage.</td></tr>
             {% endfor %}
         </table>
-        <p style="margin-top: 20px;"><a href="/" style="color: #075e54; text-decoration: none; font-weight: bold;">← Back to App</a></p>
+        <p style="margin-top: 30px;"><a href="/" style="font-weight: bold; font-size: 15px;">← Back to App Home</a></p>
     </div>
 </body>
 </html>
