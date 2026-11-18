@@ -1,15 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import uuid
-import time
 
 app = Flask(__name__)
-app.secret_key = 'super-secret-admin-key-change-this'  # Needed for admin login session
+app.secret_key = 'super-secret-admin-key-change-this'
 
-# In-memory storage for our messages and settings
-# Structure: { secret_id: { 'ciphertext': str, 'shift': int, 'passcode': str, 'expired': bool } }
+# Storage: { secret_id: { 'ciphertext': str, 'shift': int, 'passcode': str, 'expired': bool } }
 db = {}
 
-# Global admin passcode (can be changed via admin panel)
 ADMIN_SETTINGS = {
     'passcode': 'admin123'
 }
@@ -38,7 +35,7 @@ def index():
     
     if request.method == 'POST':
         message = request.form.get('message', '').strip()
-        custom_passcode = request.form.get('passcode', '').strip()
+        custom_passcode = request.form.get('passcode', '').strip() # Allows letters, symbols, numbers
         try:
             shift = int(request.form.get('shift', 3))
         except ValueError:
@@ -50,7 +47,6 @@ def index():
             encrypted_msg = caesar_encrypt(message, shift)
             secret_id = str(uuid.uuid4())[:8]
             
-            # Save to our database storage
             db[secret_id] = {
                 'ciphertext': encrypted_msg,
                 'shift': shift,
@@ -71,15 +67,17 @@ def view_secret(secret_id):
     
     if request.method == 'POST':
         entered_passcode = request.form.get('passcode', '').strip()
+        entered_ciphertext = request.form.get('ciphertext', '').strip()
         
-        # Check passcode if one was set
+        # Verify passcode (if set)
         if item['passcode'] and entered_passcode != item['passcode']:
             error = "Incorrect passcode! Access denied."
+        # Verify that the pasted ciphertext matches the stored link's ciphertext
+        elif entered_ciphertext != item['ciphertext']:
+            error = "Incorrect ciphertext pasted! Please paste the exact encrypted message."
         else:
-            # Decrypt the message
             decrypted_msg = caesar_decrypt(item['ciphertext'], item['shift'])
-            # Mark as expired / self-destruct immediately
-            item['expired'] = True
+            item['expired'] = True  # Self-destruct immediately upon successful decrypt
             
     return render_template('view.html', secret_id=secret_id, decrypted=decrypted_msg, error=error, has_passcode=bool(item['passcode']))
 
